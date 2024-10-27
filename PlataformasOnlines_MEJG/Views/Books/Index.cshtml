@@ -1,0 +1,39 @@
+﻿@model PlataformasOnlines_MEJG.Models.BooksModel
+
+@{
+    ViewBag.Title = "Buscar libros en Google Books";
+}
+
+<h2>Buscar libros en Google Books</h2>
+
+<!-- Formulario de búsqueda -->
+@using (Html.BeginForm("Search", "Books", FormMethod.Post))
+{
+    <label for="query">Término de búsqueda:</label>
+    <input type="text" name="query" id="query" required />
+    <input type="submit" value="Buscar" />
+}
+
+<!-- Mostrar error si hay -->
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+{
+    <div style="color: red;">
+        @ViewBag.Error
+    </div>
+}
+
+<!-- Mostrar los resultados de los libros si hay datos -->
+@if (Model != null && Model.Items != null)
+{
+    <h3>Resultados:</h3>
+    <ul>
+        @foreach (var book in Model.Items)
+        {
+            <li>
+                <strong>@book.VolumeInfo.Title</strong><br />
+                Autor(es): @string.Join(", ", book.VolumeInfo.Authors ?? new List<string>())<br />
+                Editorial: @book.VolumeInfo.Publisher
+            </li>
+        }
+    </ul>
+}
